@@ -29,9 +29,27 @@ impl<T> BST<T> {
         self.root.is_none()
     }
 
+    fn insert_r(&mut self, current: &mut Node<T>, data: T) {
+        if current.data >= data {
+            if current.right.is_none() {
+                current.right = Some(Box::new(Node::new(data)))
+            } else {
+                self.insert_r(&mut *current.right.unwrap(), data)
+            }
+        } else {
+            if current.left.is_none() {
+                current.left = Some(Box::new(Node::new(data)))
+            } else {
+                self.insert_r(&mut *current.left.unwrap(), data)
+            }
+        }
+    }
+
     pub fn insert(&mut self, data: T) {
         if self.is_empty() {
             self.root = Some(Box::new(Node::new(data)));
+        } else {
+            self.insert_r(&mut *self.root.unwrap(), data)
         }
     }
 }
